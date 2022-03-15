@@ -1682,7 +1682,7 @@ ble_ll_reset(void)
 uint32_t
 ble_ll_pdu_tx_time_get(uint16_t payload_len, int phy_mode)
 {
-    uint32_t usecs;
+    uint32_t usecs = 0;
 
 #if (BLE_LL_BT5_PHY_SUPPORTED)
     if (phy_mode == BLE_PHY_MODE_1M) {

@@ -139,7 +139,7 @@ ble_ll_conn_comp_event_send(struct ble_ll_conn_sm *connsm, uint8_t status,
     struct ble_hci_ev_le_subev_enh_conn_complete *enh_ev;
     struct ble_hci_ev_le_subev_conn_complete *ev;
     struct ble_hci_ev *hci_ev = (void *) evbuf;
-    uint8_t *rpa;
+    uint8_t *rpa = NULL;
 
     BLE_LL_ASSERT(evbuf);
 

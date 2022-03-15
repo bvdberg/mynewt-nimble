@@ -1620,7 +1620,7 @@ ble_ll_ctrl_rx_pause_enc_rsp(struct ble_ll_conn_sm *connsm)
 static uint8_t
 ble_ll_ctrl_rx_start_enc_rsp(struct ble_ll_conn_sm *connsm)
 {
-    int rc;
+    int rc = BLE_ERR_MAX;
 
     /* Not in proper state. Discard */
     if (connsm->enc_data.enc_state != CONN_ENC_S_START_ENC_RSP_WAIT) {
@@ -1766,7 +1766,7 @@ uint8_t
 ble_ll_ctrl_conn_param_reply(struct ble_ll_conn_sm *connsm, uint8_t *rsp,
                              struct ble_ll_conn_params *req)
 {
-    uint8_t rsp_opcode;
+    uint8_t rsp_opcode = BLE_ERR_MAX;
 
     switch (connsm->conn_role) {
 #if MYNEWT_VAL(BLE_LL_ROLE_CENTRAL)
@@ -2288,7 +2288,7 @@ static struct os_mbuf *
 ble_ll_ctrl_proc_init(struct ble_ll_conn_sm *connsm, int ctrl_proc, void *data)
 {
     uint8_t len;
-    uint8_t opcode;
+    uint8_t opcode = 0;
     uint8_t *dptr;
     uint8_t *ctrdata;
     struct os_mbuf *om;
@@ -2578,7 +2578,7 @@ ble_ll_ctrl_rx_pdu(struct ble_ll_conn_sm *connsm, struct os_mbuf *om)
     uint64_t feature;
     uint8_t len;
     uint8_t opcode;
-    uint8_t rsp_opcode;
+    uint8_t rsp_opcode = BLE_ERR_MAX;
     uint8_t *dptr;
     uint8_t *rspbuf;
     uint8_t *rspdata;
