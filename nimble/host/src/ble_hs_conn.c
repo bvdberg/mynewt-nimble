@@ -575,3 +575,11 @@ ble_hs_conn_init(void)
 
     return 0;
 }
+
+void ble_hs_conn_deinit(void)
+{
+    memset(&ble_hs_conns, 0, sizeof(ble_hs_conns));
+    memset(&ble_hs_conn_pool, 0, sizeof(ble_hs_conn_pool));
+    //memset(&ble_hs_conn_elem_mem, 0, sizeof(ble_hs_conn_elem_mem));
+}
+

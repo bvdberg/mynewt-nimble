@@ -35,27 +35,36 @@ static struct ble_npl_eventq g_eventq_dflt;
 
 // TODO filter with ifdef, controller stuff
 extern void os_msys_init(void);
+extern void os_msys_deinit(void);
 extern void os_mempool_module_init(void);
 extern void ble_transport_init(void);
 extern void ble_transport_ll_init(void);
 extern void ipc_nrf5340_init(const uint8_t* mac_nr);
+extern void ipc_nrf5340_shutdown(void);
 
 // host stuff
 void ble_svc_gap_init(void);
+void ble_svc_gap_deinit(void);
 void ble_svc_gatt_init(void);
 void ble_svc_bas_init(void);
 void ble_store_config_init(void);
 
-void nimble_port_init_host(const uint8_t* mac_nr)
+#if !NIMBLE_CFG_CONTROLLER
+void nimble_port_init_host_part1(const uint8_t* mac_nr)
 {
     /* Initialize default event queue */
     ble_npl_eventq_init(&g_eventq_dflt);
     /* Initialize the global memory pool */
     os_mempool_module_init();
     os_msys_init();
-    /* Initialize transport */
-    ipc_nrf5340_init(mac_nr);
 
+    /* Initialize transport */
+    // Note: we dont wait for net-core here anymore!
+    ipc_nrf5340_init(mac_nr);
+}
+
+void nimble_port_init_host_part2(void)
+{
     ble_transport_init();
 
     /* Initialize the host */
@@ -71,6 +80,35 @@ void nimble_port_init_host(const uint8_t* mac_nr)
 
     ble_transport_ll_init();
 }
+
+void nimble_port_shutdown_host_part1(void) {
+    // shutdown timers (hardware + FreeRTOS)
+    // shutdown IRQ (IPC)
+    // memset all global (static) structs to zero
+
+    ble_transport_ll_deinit();
+
+    ble_gatts_reset(); // TODO: also frees registers services?
+
+    ble_svc_gap_deinit();
+
+    ble_hs_deinit();
+
+    ble_transport_deinit();
+}
+
+
+void nimble_port_shutdown_host_part2(void) {
+    ipc_nrf5340_shutdown();
+
+    os_msys_deinit();
+    // os_mempool_module_init -> not needed
+
+    ble_npl_eventq_shutdown(&g_eventq_dflt);
+    memset(&g_eventq_dflt, 0, sizeof(struct ble_npl_eventq));
+}
+#endif
+
 
 #if NIMBLE_CFG_CONTROLLER
 void nimble_port_init_controller(void)
@@ -117,3 +155,4 @@ nimble_port_ll_task_func(void *arg)
     ble_ll_task(arg);
 }
 #endif
+

@@ -154,3 +154,19 @@ os_msys_init(void)
     SYSINIT_PANIC_ASSERT(rc == 0);
 #endif
 }
+
+void os_msys_deinit(void)
+{
+    STAILQ_INIT(&g_msys_pool_list);
+#if MYNEWT_VAL(MSYS_1_BLOCK_COUNT) > 0
+    //memset(&os_msys_1_data, 0, sizeof(os_msys_1_data));
+    memset(&os_msys_1_mbuf_pool, 0, sizeof(os_msys_1_mbuf_pool));
+    memset(&os_msys_1_mempool, 0, sizeof(os_msys_1_mempool));
+#endif
+#if MYNEWT_VAL(MSYS_2_BLOCK_COUNT) > 0
+    //memset(&os_msys_2_data, 0, sizeof(os_msys_2_data));
+    memset(&os_msys_2_mbuf_pool, 0, sizeof(os_msys_2_mbuf_pool));
+    memset(&os_msys_2_mempool, 0, sizeof(os_msys_2_mempool));
+#endif
+}
+

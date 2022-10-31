@@ -130,6 +130,7 @@ int ble_l2cap_tx(struct ble_hs_conn *conn, struct ble_l2cap_chan *chan,
 void ble_l2cap_remove_rx(struct ble_hs_conn *conn, struct ble_l2cap_chan *chan);
 
 int ble_l2cap_init(void);
+void ble_l2cap_deinit(void);
 
 /* Below experimental API is available when BLE_VERSION >= 52 */
 int ble_l2cap_enhanced_connect(uint16_t conn_handle,

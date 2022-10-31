@@ -144,6 +144,7 @@ int32_t ble_gattc_timer(void);
 
 int ble_gattc_any_jobs(void);
 int ble_gattc_init(void);
+void ble_gattc_deinit(void);
 
 /*** @server. */
 #define BLE_GATTS_CLT_CFG_F_NOTIFY              0x0001
@@ -200,6 +201,7 @@ int ble_gatts_clt_cfg_access(uint16_t conn_handle, uint16_t attr_handle,
 int ble_gatts_conn_can_alloc(void);
 int ble_gatts_conn_init(struct ble_gatts_conn *gatts_conn);
 int ble_gatts_init(void);
+void ble_gatts_deinit(void);
 
 #ifdef __cplusplus
 }

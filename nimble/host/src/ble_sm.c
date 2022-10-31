@@ -2859,6 +2859,16 @@ ble_sm_init(void)
 
     return 0;
 }
+
+void ble_sm_deinit(void)
+{
+#if MYNEWT_VAL(BLE_SM_SC)
+    ble_sm_sc_deinit();
+#endif
+    memset(&ble_sm_proc_pool, 0, sizeof(ble_sm_proc_pool));
+    memset(&ble_sm_procs, 0, sizeof(ble_sm_procs));
+}
+
 #else
 /* if pairing is not supported it is only needed to reply with Pairing
  * Failed with 'Pairing not Supported' reason so this function can be very

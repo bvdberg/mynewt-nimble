@@ -31,3 +31,18 @@ struct ble_hs_cfg ble_hs_cfg = {
     .sm_our_key_dist = MYNEWT_VAL(BLE_SM_OUR_KEY_DIST),
     .sm_their_key_dist = MYNEWT_VAL(BLE_SM_THEIR_KEY_DIST),
 };
+
+void ble_hs_cfg_deinit(void) {
+    struct ble_hs_cfg cfg2 = {
+        /** Security manager settings. */
+        .sm_io_cap = MYNEWT_VAL(BLE_SM_IO_CAP),
+        .sm_oob_data_flag = MYNEWT_VAL(BLE_SM_OOB_DATA_FLAG),
+        .sm_bonding = MYNEWT_VAL(BLE_SM_BONDING),
+        .sm_mitm = MYNEWT_VAL(BLE_SM_MITM),
+        .sm_sc = MYNEWT_VAL(BLE_SM_SC),
+        .sm_keypress = MYNEWT_VAL(BLE_SM_KEYPRESS),
+        .sm_our_key_dist = MYNEWT_VAL(BLE_SM_OUR_KEY_DIST),
+        .sm_their_key_dist = MYNEWT_VAL(BLE_SM_THEIR_KEY_DIST),
+    };
+    memcpy(&ble_hs_cfg, &cfg2, sizeof(ble_hs_cfg));
+}

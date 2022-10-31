@@ -349,6 +349,23 @@ ble_transport_init(void)
 #endif
 }
 
+// TODO only for app core
+void
+ble_transport_deinit(void)
+{
+    //memset(&pool_cmd_buf, 0, sizeof(pool_cmd_buf));
+    memset(&pool_cmd, 0, sizeof(pool_cmd));
+    //memset(&pool_evt_buf, 0, sizeof(pool_evt_buf));
+    memset(&pool_evt, 0, sizeof(pool_evt));
+    //memset(&pool_evt_lo_buf, 0, sizeof(pool_evt_lo_buf));
+    memset(&pool_evt_lo, 0, sizeof(pool_evt_lo));
+    //memset(&pool_acl_buf, 0, sizeof(pool_acl_buf));
+    memset(&pool_acl, 0, sizeof(pool_acl));
+    memset(&mpool_acl, 0, sizeof(mpool_acl));
+
+    transport_put_acl_from_ll_cb = NULL;
+}
+
 int
 ble_transport_register_put_acl_from_ll_cb(os_mempool_put_fn (*cb))
 {

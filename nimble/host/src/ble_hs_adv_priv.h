@@ -29,6 +29,9 @@ int ble_hs_adv_set_flat(uint8_t type, int data_len, const void *data,
 int ble_hs_adv_find_field(uint8_t type, const uint8_t *data, uint8_t length,
                           const struct ble_hs_adv_field **out);
 
+void ble_hs_adv_deinit(void);
+
+
 #ifdef __cplusplus
 }
 #endif

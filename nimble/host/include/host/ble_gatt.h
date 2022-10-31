@@ -702,6 +702,7 @@ int ble_gattc_indicate(uint16_t conn_handle, uint16_t chr_val_handle);
 
 /** Initialize the BLE GATT client. */
 int ble_gattc_init(void);
+void ble_gattc_deinit(void);
 
 /*** @server. */
 

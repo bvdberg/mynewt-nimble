@@ -801,3 +801,10 @@ ble_hs_adv_find_field(uint8_t type, const uint8_t *data, uint8_t length,
 
     return 0;
 }
+
+void ble_hs_adv_deinit(void) {
+    memset(&ble_hs_adv_uuids16, 0, sizeof(ble_hs_adv_uuids16));
+    memset(&ble_hs_adv_uuids32, 0, sizeof(ble_hs_adv_uuids32));
+    memset(&ble_hs_adv_uuids128, 0, sizeof(ble_hs_adv_uuids128));
+}
+

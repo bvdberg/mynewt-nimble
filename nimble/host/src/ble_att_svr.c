@@ -2927,4 +2927,14 @@ ble_att_svr_init(void)
     return 0;
 }
 
+void ble_att_svr_deinit(void)
+{
+    memset(&ble_att_svr_list, 0, sizeof(ble_att_svr_list));
+    memset(&ble_att_svr_hidden_list, 0, sizeof(ble_att_svr_hidden_list));
+    ble_att_svr_id = 0;
+    ble_att_svr_entry_mem = NULL;
+    memset(&ble_att_svr_entry_pool, 0, sizeof(ble_att_svr_entry_pool));
+    //memset(&ble_att_svr_prep_entry_mem, 0, sizeof(ble_att_svr_prep_entry_mem));
+}
+
 #endif

@@ -151,4 +151,12 @@ ble_hs_periodic_sync_init(void)
 
     return 0;
 }
+
+void ble_hs_periodic_sync_deinit(void)
+{
+    memset(&g_ble_hs_periodic_sync_handles, 0, sizeof(g_ble_hs_periodic_sync_handles));
+    memset(&ble_hs_periodic_sync_pool, 0, sizeof(ble_hs_periodic_sync_pool));
+    //memset(&ble_hs_psync_elem_mem, 0, sizeof(ble_hs_psync_elem_mem));
+}
+
 #endif

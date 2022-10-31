@@ -665,6 +665,13 @@ ble_sm_alg_ecc_init(void)
     uECC_set_rng(ble_sm_alg_rand);
 }
 
+void ble_sm_alg_ecc_deinit(void)
+{
+    uECC_set_rng(NULL);
+#if MYNEWT_VAL(BLE_SM_SC) && MYNEWT_VAL(TRNG)
+    g_trng = NULL;
+#endif
+}
 #endif
 #endif
 #endif

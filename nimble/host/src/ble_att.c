@@ -701,4 +701,10 @@ ble_att_init(void)
     return 0;
 }
 
+void ble_att_deinit(void)
+{
+    ble_att_preferred_mtu_val = 0;
+    memset(&ble_att_stats, 0, sizeof(ble_att_stats));
+}
+
 #endif

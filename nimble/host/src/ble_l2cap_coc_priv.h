@@ -61,6 +61,7 @@ struct ble_l2cap_coc_srv {
 
 #if MYNEWT_VAL(BLE_L2CAP_COC_MAX_NUM) != 0
 int ble_l2cap_coc_init(void);
+void ble_l2cap_coc_deinit(void);
 int ble_l2cap_coc_create_server(uint16_t psm, uint16_t mtu,
                                 ble_l2cap_event_fn *cb, void *cb_arg);
 int ble_l2cap_coc_create_srv_chan(struct ble_hs_conn *conn, uint16_t psm,

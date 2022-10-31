@@ -34,6 +34,7 @@ struct os_mbuf;
 
 /* Initialization */
 void ble_transport_init(void);
+void ble_transport_deinit(void);
 
 /* Allocators for supported data types */
 void *ble_transport_alloc_cmd(void);

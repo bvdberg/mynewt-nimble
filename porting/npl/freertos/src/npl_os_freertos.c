@@ -158,6 +158,12 @@ npl_freertos_mutex_init(struct ble_npl_mutex *mu)
     return BLE_NPL_OK;
 }
 
+void npl_freertos_mutex_deinit(struct ble_npl_mutex *mu) {
+    if (mu->handle) {
+        vQueueDelete(mu->handle);
+    }
+}
+
 ble_npl_error_t
 npl_freertos_mutex_pend(struct ble_npl_mutex *mu, ble_npl_time_t timeout)
 {
@@ -210,6 +216,10 @@ npl_freertos_sem_init(struct ble_npl_sem *sem, uint16_t tokens)
     assert(sem->handle);
 
     return BLE_NPL_OK;
+}
+
+void npl_freertos_sem_deinit(struct ble_npl_sem *sem) {
+    if (sem->handle) vQueueDelete(sem->handle);
 }
 
 ble_npl_error_t
@@ -282,6 +292,15 @@ npl_freertos_callout_init(struct ble_npl_callout *co, struct ble_npl_eventq *evq
     configASSERT(co->handle);
     co->evq = evq;
     ble_npl_event_init(&co->ev, ev_cb, ev_arg);
+}
+
+void npl_freertos_callout_deinit(struct ble_npl_callout *co)
+{
+    if (co->handle) {
+        //xTimerStop(co->handle, portMAX_DELAY);
+        xTimerDelete(co->handle, portMAX_DELAY);
+        co->handle = NULL;
+    }
 }
 
 ble_npl_error_t

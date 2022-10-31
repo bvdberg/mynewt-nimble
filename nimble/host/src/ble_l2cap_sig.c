@@ -2028,4 +2028,11 @@ ble_l2cap_sig_init(void)
     return 0;
 }
 
+void ble_l2cap_sig_deinit(void)
+{
+    memset(&ble_l2cap_sig_procs, 0, sizeof(ble_l2cap_sig_procs));
+    ble_l2cap_sig_cur_id = 0;
+    //memset(&ble_l2cap_sig_proc_mem, 0, sizeof(ble_l2cap_sig_proc_mem));
+    memset(&ble_l2cap_sig_proc_pool, 0, sizeof(ble_l2cap_sig_proc_pool));
+}
 #endif

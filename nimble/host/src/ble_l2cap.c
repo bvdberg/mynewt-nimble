@@ -516,4 +516,15 @@ ble_l2cap_init(void)
     return 0;
 }
 
+void ble_l2cap_deinit(void)
+{
+    ble_sm_deinit();
+    ble_l2cap_coc_deinit();
+    ble_l2cap_sig_deinit();
+
+    memset(&ble_l2cap_chan_pool, 0, sizeof(ble_l2cap_chan_pool));
+    //memset(&ble_l2cap_chan_mem, 0, sizeof(ble_l2cap_chan_mem));
+    memset(&ble_l2cap_stats, 0, sizeof(ble_l2cap_stats));
+}
+
 #endif

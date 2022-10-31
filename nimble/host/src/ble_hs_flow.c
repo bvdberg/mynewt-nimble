@@ -270,3 +270,14 @@ ble_hs_flow_startup(void)
 
     return 0;
 }
+
+void ble_hs_flow_deinit(void) {
+#if MYNEWT_VAL(BLE_HS_FLOW_CTRL)
+    ble_npl_callout_deinit(&ble_hs_flow_timer);
+#endif
+    ble_hs_flow_num_completed_pkts = 0;
+    memset(&ble_hs_flow_ev, 0, sizeof(struct ble_npl_event));
+    memset(&ble_hs_flow_event_cb, 0, sizeof(ble_npl_event_fn));
+    memset(ble_hs_flow_mbuf_conn_handle, 0, sizeof(ble_hs_flow_mbuf_conn_handle));
+}
+

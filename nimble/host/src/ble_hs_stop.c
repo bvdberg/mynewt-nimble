@@ -282,3 +282,13 @@ ble_hs_stop_init(void)
                          ble_hs_stop_terminate_timeout_cb, NULL);
 #endif
 }
+
+void ble_hs_stop_deinit(void)
+{
+    ble_npl_callout_deinit(&ble_hs_stop_terminate_tmo);
+
+    memset(&ble_hs_stop_gap_listener, 0, sizeof(struct ble_gap_event_listener));
+    memset(&ble_hs_stop_listeners, 0, sizeof(struct ble_hs_stop_listener_slist));
+    ble_hs_stop_conn_cnt = 0;
+}
+

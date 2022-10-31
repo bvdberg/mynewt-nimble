@@ -302,3 +302,10 @@ ble_svc_gap_init(void)
     SYSINIT_PANIC_ASSERT(rc == 0);
 #endif
 }
+
+void ble_svc_gap_deinit(void)
+{
+    ble_svc_gap_chr_changed_cb_fn = NULL;
+    ble_svc_gap_name[0] = 0;
+    ble_svc_gap_appearance = MYNEWT_VAL(BLE_SVC_GAP_APPEARANCE);
+}

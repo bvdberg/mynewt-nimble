@@ -327,6 +327,7 @@ int ble_sm_alg_gen_dhkey(const uint8_t *peer_pub_key_x,
                          const uint8_t *our_priv_key, uint8_t *out_dhkey);
 int ble_sm_alg_gen_key_pair(uint8_t *pub, uint8_t *priv);
 void ble_sm_alg_ecc_init(void);
+void ble_sm_alg_ecc_deinit(void);
 
 int ble_sm_csis_generate_rsi(const uint8_t *sirk, uint8_t *out);
 int ble_sm_csis_encrypt_sirk(const uint8_t *ltk, const uint8_t *plaintext_sirk,
@@ -373,6 +374,7 @@ bool ble_sm_sc_oob_data_check(struct ble_sm_proc *proc,
                               bool oob_data_remote_present);
 void ble_sm_sc_oob_confirm(struct ble_sm_proc *proc, struct ble_sm_result *res);
 void ble_sm_sc_init(void);
+void ble_sm_sc_deinit(void);
 #else
 #define ble_sm_sc_io_action(proc, action) (BLE_HS_ENOTSUP)
 #define ble_sm_sc_confirm_exec(proc, res)
@@ -409,6 +411,7 @@ int ble_sm_enc_initiate(uint16_t conn_handle, uint8_t key_size,
                         const uint8_t *ltk, uint16_t ediv,
                         uint64_t rand_val, int auth);
 int ble_sm_init(void);
+void ble_sm_deinit(void);
 #else
 
 #define ble_sm_enc_change_rx(evt) ((void)(evt))

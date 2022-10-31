@@ -6664,6 +6664,29 @@ err:
     return rc;
 }
 
+void ble_gap_deinit(void)
+{
+    ble_npl_mutex_deinit(&preempt_done_mutex);
+    memset(&preempt_done_mutex, 0, sizeof(preempt_done_mutex));
+
+    // Why is ble_gap_master in section bssnz?
+    memset(&ble_gap_master, 0, sizeof(ble_gap_master));
+#if MYNEWT_VAL(BLE_PERIODIC_ADV)
+    memset(&ble_gap_sync, 0, sizeof(ble_gap_sync));
+#endif
+    memset(&ble_gap_slave, 0, sizeof(ble_gap_slave));
+
+    //memset(&ble_gap_update_entry_mem, 0, sizeof(ble_gap_update_entry_mem));
+    memset(&ble_gap_update_entry_pool, 0, sizeof(ble_gap_update_entry_pool));
+    memset(&ble_gap_update_entries, 0, sizeof(ble_gap_update_entries));
+
+    memset(&ble_gap_stats, 0, sizeof(ble_gap_stats));
+
+    ble_hs_adv_deinit();
+
+    ble_hs_pvcy_deinit();
+}
+
 int
 ble_gap_enh_read_transmit_power_level(uint16_t conn_handle, uint8_t phy, uint8_t *out_status, uint8_t *out_phy ,
 				      uint8_t *out_curr_tx_power_level, uint8_t *out_max_tx_power_level)

@@ -25,6 +25,7 @@
 #include <ipc_nrf5340/ipc_nrf5340.h>
 #include <nimble/transport.h>
 #include <nimble/transport/hci_ipc.h>
+#include <nimble/transport/transport_ipc.h>
 
 #if MYNEWT_VAL(BLE_CONTROLLER)
 #define IPC_TX_CHANNEL 0
@@ -192,6 +193,12 @@ ble_transport_ll_init(void)
     hci_ipc_init(shm, &g_hci_ipc_sm);
     nrf5340_ble_hci_init();
 }
+
+void ble_transport_ll_deinit(void)
+{
+    memset(&g_hci_ipc_sm, 0, sizeof(struct hci_ipc_sm));
+}
+
 #endif /* !BLE_CONTROLLER */
 
 uint16_t

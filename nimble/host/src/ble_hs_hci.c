@@ -651,3 +651,28 @@ ble_hs_hci_init(void)
                             "ble_hs_hci_frag");
     BLE_HS_DBG_ASSERT_EVAL(rc == 0);
 }
+
+void ble_hs_hci_deinit(void)
+{
+    ble_npl_sem_deinit(&ble_hs_hci_sem);
+    ble_npl_mutex_deinit(&ble_hs_hci_mutex);
+    memset(&ble_hs_hci_mutex, 0, sizeof(ble_hs_hci_mutex));
+    memset(&ble_hs_hci_sem, 0, sizeof(ble_hs_hci_sem));
+
+    ble_transport_free((uint8_t*)ble_hs_hci_ack);
+    ble_hs_hci_ack = 0;
+    ble_hs_hci_buf_sz = 0;
+    ble_hs_hci_max_pkts = 0;
+    ble_hs_hci_sup_feat = 0;
+    ble_hs_hci_version = 0;
+
+    //memset(&ble_hs_hci_frag_data, 0, sizeof(ble_hs_hci_frag_data));
+    memset(&ble_hs_hci_frag_mbuf_pool, 0, sizeof(ble_hs_hci_frag_mbuf_pool));
+    memset(&ble_hs_hci_frag_mempool, 0, sizeof(ble_hs_hci_frag_mempool));
+
+    ble_hs_hci_avail_pkts = 0;
+
+#if MYNEWT_VAL(BLE_HS_PHONY_HCI_ACKS)
+    ble_hs_hci_phony_ack_cb = NULL;
+#endif
+}

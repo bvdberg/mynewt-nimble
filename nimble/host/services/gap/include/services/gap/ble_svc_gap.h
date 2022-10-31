@@ -47,6 +47,7 @@ uint16_t ble_svc_gap_device_appearance(void);
 int ble_svc_gap_device_appearance_set(uint16_t appearance);
 
 void ble_svc_gap_init(void);
+void ble_svc_gap_deinit(void);
 
 #ifdef __cplusplus
 }

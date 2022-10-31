@@ -91,6 +91,13 @@ ble_npl_eventq_init(struct ble_npl_eventq *evq)
     evq->q = xQueueCreate(32, sizeof(struct ble_npl_eventq *));
 }
 
+static inline void
+ble_npl_eventq_shutdown(struct ble_npl_eventq *evq)
+{
+    vQueueDelete(evq->q);
+    evq->q = NULL;
+}
+
 static inline struct ble_npl_event *
 ble_npl_eventq_get(struct ble_npl_eventq *evq, ble_npl_time_t tmo)
 {
@@ -154,6 +161,10 @@ ble_npl_mutex_init(struct ble_npl_mutex *mu)
     return npl_freertos_mutex_init(mu);
 }
 
+static inline void ble_npl_mutex_deinit(struct ble_npl_mutex* mu) {
+    npl_freertos_mutex_deinit(mu);
+}
+
 static inline ble_npl_error_t
 ble_npl_mutex_pend(struct ble_npl_mutex *mu, ble_npl_time_t timeout)
 {
@@ -170,6 +181,12 @@ static inline ble_npl_error_t
 ble_npl_sem_init(struct ble_npl_sem *sem, uint16_t tokens)
 {
     return npl_freertos_sem_init(sem, tokens);
+}
+
+static inline void
+ble_npl_sem_deinit(struct ble_npl_sem *sem)
+{
+    return npl_freertos_sem_deinit(sem);
 }
 
 static inline ble_npl_error_t
@@ -195,6 +212,13 @@ ble_npl_callout_init(struct ble_npl_callout *co, struct ble_npl_eventq *evq,
                      ble_npl_event_fn *ev_cb, void *ev_arg)
 {
     npl_freertos_callout_init(co, evq, ev_cb, ev_arg);
+}
+
+static inline void
+ble_npl_callout_deinit(struct ble_npl_callout *co)
+{
+    npl_freertos_callout_deinit(co);
+    memset(co, 0, sizeof(struct ble_npl_callout));
 }
 
 static inline ble_npl_error_t

@@ -143,6 +143,7 @@ typedef int ble_hs_conn_foreach_fn(struct ble_hs_conn *conn, void *arg);
 void ble_hs_conn_foreach(ble_hs_conn_foreach_fn *cb, void *arg);
 
 int ble_hs_conn_init(void);
+void ble_hs_conn_deinit(void);
 
 #ifdef __cplusplus
 }

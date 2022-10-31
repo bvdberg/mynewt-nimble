@@ -788,6 +788,66 @@ ble_hs_init(void)
 #endif
 }
 
+void ble_hs_deinit(void) {
+    // reverse from ble_hs_start
+    ble_npl_callout_deinit(&ble_hs_timer);
+    memset(&ble_hs_timer, 0, sizeof(struct ble_npl_callout));
+    ble_hs_flow_deinit();
+    //ble_hs_reset();
+    ble_hs_sync_state = 0;
+    ble_hs_reset_reason = 0;
+    ble_hs_parent_task = NULL;
+
+    // reverse from init()
+    ble_hs_evq_set(NULL);
+
+#if MYNEWT_VAL(BLE_HS_DEBUG)
+    ble_hs_dbg_mutex_locked = 0;
+#endif
+    ble_npl_mutex_deinit(&ble_hs_mutex);
+    memset(&ble_hs_mutex, 0, sizeof(struct ble_npl_mutex));
+    memset(&ble_hs_stats, 0, sizeof(ble_hs_stats));
+    memset(&ble_hs_rx_q, 0, sizeof(struct ble_mqueue));
+
+    ble_hs_stop_deinit();
+    ble_gap_deinit();
+#if NIMBLE_BLE_CONNECT
+    ble_gatts_deinit(); // 19 usec
+    ble_gattc_deinit(); // 12 usec
+    ble_att_svr_deinit();   // 13 usec
+    ble_att_deinit();   // 1 usec
+    ble_l2cap_deinit(); //  65 usec
+#endif
+
+    ble_hs_evq = NULL;
+    ble_hs_max_attrs = 0;
+    ble_hs_max_services = 0;
+    ble_hs_max_client_configs = 0;
+
+#if MYNEWT_VAL(BLE_PERIODIC_ADV)
+    ble_hs_periodic_sync_deinit();
+#endif
+
+    ble_hs_conn_deinit();
+    ble_hs_hci_deinit();
+
+    memset(&ble_hs_ev_start_stage2, 0, sizeof(struct ble_npl_event));
+    memset(&ble_hs_ev_start_stage1, 0, sizeof(struct ble_npl_event));
+    memset(&ble_hs_ev_reset, 0, sizeof(struct ble_npl_event));
+#if NIMBLE_BLE_CONNECT
+    memset(&ble_hs_ev_tx_notifications, 0, sizeof(struct ble_npl_event));
+#endif
+    ble_hs_enabled_state = 0;
+    ble_hs_reset_reason = 0;
+    memset(&ble_hs_hci_ev_pool, 0, sizeof(struct os_mempool));
+    //memset(ble_hs_hci_os_event_buf, 0, sizeof(ble_hs_hci_os_event_buf));
+
+    extern void ble_hs_cfg_deinit(void);
+    ble_hs_cfg_deinit();
+
+    ble_hs_id_reset();
+}
+
 /* Transport APIs for HS side */
 
 int

@@ -2216,6 +2216,7 @@ ble_gatts_reset(void)
 
     ble_hs_unlock();
 
+    ble_gatts_num_svc_defs = 0;
     return rc;
 }
 
@@ -2237,3 +2238,16 @@ ble_gatts_init(void)
     return 0;
 
 }
+
+void ble_gatts_deinit(void)
+{
+    os_memblock_put(&ble_gatts_clt_cfg_pool, ble_gatts_clt_cfgs);
+    ble_gatts_clt_cfgs = NULL;
+    ble_gatts_num_cfgable_chrs = 0;
+    ble_gatts_free_svc_defs();
+    ble_gatts_free_mem();
+    ble_gatts_num_svc_entries = 0;
+    memset(&ble_gatts_clt_cfg_pool, 0, sizeof(ble_gatts_clt_cfg_pool));
+    memset(&ble_gatts_stats, 0, sizeof(ble_gatts_stats));
+}
+

@@ -80,7 +80,6 @@ static const uint8_t ble_sm_sc_resp_ioa[5 /*resp*/ ][5 /*init*/ ] =
 };
 
 #if MYNEWT_VAL(BLE_HS_DEBUG)
-
 static uint8_t ble_sm_dbg_sc_pub_key[64];
 static uint8_t ble_sm_dbg_sc_priv_key[32];
 static uint8_t ble_sm_dbg_sc_keys_set;
@@ -912,6 +911,14 @@ ble_sm_sc_init(void)
 {
     ble_sm_alg_ecc_init();
     ble_sm_sc_keys_generated = 0;
+}
+
+void ble_sm_sc_deinit(void)
+{
+    ble_sm_sc_keys_generated = 0;
+    ble_sm_alg_ecc_deinit();
+    memset(ble_sm_sc_pub_key, 0, sizeof(ble_sm_sc_pub_key));
+    memset(ble_sm_sc_priv_key, 0, sizeof(ble_sm_sc_priv_key));
 }
 
 #endif  /* MYNEWT_VAL(BLE_SM_SC) */

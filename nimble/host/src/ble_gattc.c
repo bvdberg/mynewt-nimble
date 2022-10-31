@@ -5042,4 +5042,12 @@ ble_gattc_init(void)
     return 0;
 }
 
+void ble_gattc_deinit(void)
+{
+    memset(&ble_gattc_proc_pool, 0, sizeof(ble_gattc_proc_pool));
+    memset(&ble_gattc_procs, 0, sizeof(ble_gattc_procs));
+    memset(&ble_gattc_resume_at, 0, sizeof(ble_gattc_resume_at));
+    memset(&ble_gattc_stats, 0, sizeof(ble_gattc_stats));
+}
+
 #endif

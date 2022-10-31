@@ -682,4 +682,11 @@ ble_l2cap_coc_init(void)
                            "ble_l2cap_coc_srv_pool");
 }
 
+void ble_l2cap_coc_deinit(void)
+{
+    memset(&ble_l2cap_coc_srvs, 0, sizeof(ble_l2cap_coc_srvs));
+    //memset(&ble_l2cap_coc_srv_mem, 0, sizeof(ble_l2cap_coc_srv_mem));
+    memset(&ble_l2cap_coc_srv_pool, 0, sizeof(ble_l2cap_coc_srv_pool));
+}
+
 #endif
