@@ -65,8 +65,10 @@ ble_npl_error_t npl_freertos_time_ticks_to_ms(ble_npl_time_t ticks,
 
 void npl_freertos_hw_set_isr(int irqn, void (*addr)(void));
 
+// BB not used, no implementation
 uint32_t npl_freertos_hw_enter_critical(void);
 
+// BB not used, no implementation
 void npl_freertos_hw_exit_critical(uint32_t ctx);
 
 #ifdef __cplusplus

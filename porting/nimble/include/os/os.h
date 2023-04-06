@@ -27,7 +27,25 @@ extern "C" {
 #endif
 
 #include "syscfg/syscfg.h"
+#include "os/util.h"
 #include "nimble/nimble_npl.h"
+/*
+    BB TEMP fix here, normally included via:
+                             os/os_time.h OR os/os_task.h
+                             os/os_arch.h
+    mdk/nrf5340_network.h OR mcu/cortex_m33.h
+    core_cm33.h
+    cmsis_compiler.h
+    cmsis_gcc.h
+*/
+#include <cmsis_compiler.h>
+
+#ifndef min
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+#endif
+#ifndef max
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+#endif
 
 #define OS_ALIGN(__n, __a) (                             \
         (((__n) & ((__a) - 1)) == 0)                   ? \
@@ -39,7 +57,8 @@ extern "C" {
 typedef uint32_t os_sr_t;
 #define OS_ENTER_CRITICAL(_sr) (_sr = ble_npl_hw_enter_critical())
 #define OS_EXIT_CRITICAL(_sr) (ble_npl_hw_exit_critical(_sr))
-#define OS_ASSERT_CRITICAL() assert(ble_npl_hw_is_in_critical())
+#define OS_ASSERT_CRITICAL()
+//#define OS_ASSERT_CRITICAL() assert(ble_npl_hw_is_in_critical())
 
 /* Mynewt components (not abstracted in NPL) */
 #include "os/endian.h"

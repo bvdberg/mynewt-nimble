@@ -21,6 +21,8 @@
 #include <stddef.h>
 #include <string.h>
 #include "nimble/nimble_npl.h"
+#include "syscfg/syscfg.h"
+#include "nrfx.h"
 
 /* Include the file that defines the SCB for your HW. */
 #ifdef NIMBLE_NPL_OS_EXTRA_INCLUDE
@@ -30,6 +32,7 @@
 static inline bool
 in_isr(void)
 {
+    // see https://stm32f4-discovery.net/2015/06/get-interrupt-execution-status-on-cortex-m-processors/
     /* XXX hw specific! */
     return (SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) != 0;
 }
@@ -114,6 +117,7 @@ npl_freertos_eventq_remove(struct ble_npl_eventq *evq,
             }
 
             ret = xQueueSendToBackFromISR(evq->q, &tmp_ev, &woken2);
+
             assert(ret == pdPASS);
             woken |= woken2;
         }
@@ -275,6 +279,7 @@ npl_freertos_callout_init(struct ble_npl_callout *co, struct ble_npl_eventq *evq
 {
     memset(co, 0, sizeof(*co));
     co->handle = xTimerCreate("co", 1, pdFALSE, co, os_callout_timer_cb);
+    configASSERT(co->handle);
     co->evq = evq;
     ble_npl_event_init(&co->ev, ev_cb, ev_arg);
 }
@@ -349,4 +354,55 @@ npl_freertos_time_ticks_to_ms(ble_npl_time_t ticks, uint32_t *out_ms)
     *out_ms = ms;
 
     return 0;
+}
+
+/*
+    NOTE: FreeRTOS puts the Vector Table inside the Flash, so we cannot update with
+    NVIC_SetVector(). Do this as a workaround.
+*/
+
+typedef void (*irq_handler_t)(void);
+
+#if MYNEWT_VAL(MCU_APP_CORE)
+
+// TODO
+
+#else
+
+static irq_handler_t rng_handler;
+static irq_handler_t rtc0_handler;
+static irq_handler_t radio_handler;
+
+void RADIO_IRQHandler(void) {
+    if (radio_handler) radio_handler();
+
+}
+
+void RNG_IRQHandler(void) {
+    if (rng_handler) rng_handler();
+}
+
+void RTC0_IRQHandler(void) {
+    if (rtc0_handler) rtc0_handler();
+}
+#endif
+
+
+
+void npl_freertos_hw_set_isr(int irqn, void (*addr)(void)) {
+    switch (irqn) {
+#if MYNEWT_VAL(MCU_APP_CORE)
+        // TODO
+#else
+    case RADIO_IRQn:
+        radio_handler = addr;
+        break;
+    case RNG_IRQn:
+        rng_handler = addr;
+        break;
+    case RTC0_IRQn:
+        rtc0_handler = addr;
+        break;
+#endif
+    }
 }

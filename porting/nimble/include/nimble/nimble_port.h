@@ -26,7 +26,11 @@
 extern "C" {
 #endif
 
-void nimble_port_init(void);
+void nimble_port_init_host(const uint8_t* mac_nr);
+
+#if NIMBLE_CFG_CONTROLLER
+void nimble_port_init_controller(void);
+#endif
 
 void nimble_port_run(void);
 

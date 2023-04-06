@@ -26,14 +26,27 @@
 #if NIMBLE_CFG_CONTROLLER
 #include "controller/ble_ll.h"
 #endif
+#ifndef RIOT_VERSION
+#include "hal/hal_timer.h"
+#include "os/os_cputime.h"
+#endif
 
 static struct ble_npl_eventq g_eventq_dflt;
 
+// TODO filter with ifdef, controller stuff
 extern void os_msys_init(void);
 extern void os_mempool_module_init(void);
+extern void ble_transport_init(void);
+extern void ble_transport_ll_init(void);
+extern void ipc_nrf5340_init(const uint8_t* mac_nr);
 
-void
-nimble_port_init(void)
+// host stuff
+void ble_svc_gap_init(void);
+void ble_svc_gatt_init(void);
+void ble_svc_bas_init(void);
+void ble_store_config_init(void);
+
+void nimble_port_init_host(const uint8_t* mac_nr)
 {
     /* Initialize default event queue */
     ble_npl_eventq_init(&g_eventq_dflt);
@@ -41,20 +54,42 @@ nimble_port_init(void)
     os_mempool_module_init();
     os_msys_init();
     /* Initialize transport */
+    ipc_nrf5340_init(mac_nr);
+
     ble_transport_init();
+
     /* Initialize the host */
     ble_transport_hs_init();
 
+    ble_svc_gap_init();
+
+    ble_svc_gatt_init();
+
+    ble_svc_bas_init();
+
+    ble_store_config_init();
+
+    ble_transport_ll_init();
+}
+
 #if NIMBLE_CFG_CONTROLLER
+void nimble_port_init_controller(void)
+{
+    ble_npl_eventq_init(&g_eventq_dflt);
+    os_mempool_module_init();
+    os_msys_init();
+
+    ipc_nrf5340_init(NULL);
+    ble_transport_init();
+    ble_transport_hs_init();
+
 #ifndef RIOT_VERSION
     hal_timer_init(5, NULL);
     os_cputime_init(32768);
 #endif
-#endif
-
-    /* Initialize the controller */
     ble_transport_ll_init();
 }
+#endif
 
 void
 nimble_port_run(void)
