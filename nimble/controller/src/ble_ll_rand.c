@@ -147,7 +147,16 @@ ble_ll_rand(void)
         ble_ll_rand_data_get((uint8_t *)xsubi, sizeof(xsubi));
     }
 
+#if 1
+    // BB jrand48 hangs on GCC 10.3+, try HACK-around
+    xsubi[0] += xsubi[1];
+    xsubi[1] *= 57;
+    xsubi[2] += 13;
+    uint32_t num = xsubi[0] * xsubi[1] + xsubi[2];
+    return num;
+#else
     return (uint32_t) jrand48(xsubi);
+#endif
 #else
     return random_uint32();
 #endif
